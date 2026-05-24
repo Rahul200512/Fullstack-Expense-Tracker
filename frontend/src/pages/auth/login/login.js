@@ -1,13 +1,16 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useRef} from 'react';
 import '../../../assets/styles/register.css';
 import {useForm} from 'react-hook-form';
 import { Link, useNavigate} from 'react-router-dom';
 import AuthService from '../../../services/auth.service';
+import API_BASE_URL from '../../../services/auth.config';
 import Logo from '../../../components/utils/Logo';
 
 function Login() {
 
     const navigate = useNavigate();
+
+    const [serverStatus, setServerStatus] = useState('checking'); // 'checking', 'awake', 'waking'
 
     useEffect(() => {
         if (AuthService.getCurrentUser() && AuthService.getCurrentUser().roles.includes("ROLE_USER")) {
@@ -17,17 +20,51 @@ function Login() {
         }
     }, [])
 
+    // Check if backend server is awake
+    useEffect(() => {
+        let cancelled = false;
+        const timeout = setTimeout(() => {
+            if (!cancelled && serverStatus === 'checking') setServerStatus('waking');
+        }, 3000);
+
+        const checkServer = () => {
+            fetch(API_BASE_URL + '/auth/signin', { method: 'POST', mode: 'no-cors' })
+                .then(() => { if (!cancelled) { setServerStatus('awake'); clearTimeout(timeout); } })
+                .catch(() => {
+                    if (!cancelled) {
+                        setServerStatus('waking');
+                        const interval = setInterval(() => {
+                            fetch(API_BASE_URL + '/auth/signin', { method: 'POST', mode: 'no-cors' })
+                                .then(() => { if (!cancelled) { setServerStatus('awake'); clearInterval(interval); } })
+                                .catch(() => {});
+                        }, 5000);
+                        setTimeout(() => clearInterval(interval), 120000);
+                    }
+                });
+        };
+        checkServer();
+
+        return () => { cancelled = true; clearTimeout(timeout); };
+    }, [])
+
 
     const {register, handleSubmit,formState} = useForm();
 
     const [response_error, setResponseError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isDemoLoading, setIsDemoLoading] = useState(false);
+    const [warmupMsg, setWarmupMsg] = useState("");
 
     const onSubmit = async (data) => {
         setIsLoading(true)
+        setWarmupMsg("");
+        const warmupTimer = setTimeout(() => {
+            setWarmupMsg("Server is waking up, please wait...");
+        }, 3000);
         await AuthService.login_req(data.email, data.password).then(
             () => {
+                clearTimeout(warmupTimer);
+                setWarmupMsg("");
                 setResponseError("");
 
                 setTimeout(() => {
@@ -40,6 +77,8 @@ function Login() {
                 localStorage.setItem("message", JSON.stringify({ status: "SUCCESS", text: "Login successfull!" }))
             },
             (error) => {
+                clearTimeout(warmupTimer);
+                setWarmupMsg("");
                 const resMessage =(error.response && error.response.data && error.response.data.message) || error.message || error.toString();
                 console.log(resMessage);
                 if (resMessage === "Bad credentials"){
@@ -55,8 +94,14 @@ function Login() {
     const handleDemoLogin = async () => {
         setIsDemoLoading(true);
         setResponseError("");
+        setWarmupMsg("");
+        const warmupTimer = setTimeout(() => {
+            setWarmupMsg("Server is waking up, please wait...");
+        }, 3000);
         await AuthService.login_req("demo@mywallet.com", "Demo@1234").then(
             () => {
+                clearTimeout(warmupTimer);
+                setWarmupMsg("");
                 setResponseError("");
                 setTimeout(() => {
                     if (AuthService.getCurrentUser().roles.includes("ROLE_USER")) {
@@ -66,6 +111,8 @@ function Login() {
                 localStorage.setItem("message", JSON.stringify({ status: "SUCCESS", text: "Welcome to Demo!" }))
             },
             (error) => {
+                clearTimeout(warmupTimer);
+                setWarmupMsg("");
                 console.log(error);
                 setResponseError("Demo account not available. Please register a new account.");
             }
@@ -78,6 +125,40 @@ function Login() {
             <form className="auth-form"  onSubmit={handleSubmit(onSubmit)}>
             <Logo/>
                 <h2>Login</h2>
+
+                {serverStatus === 'waking' && (
+                    <div style={{
+                        background: '#e0f2fe',
+                        border: '1px solid #7dd3fc',
+                        borderRadius: '8px',
+                        padding: '10px 14px',
+                        marginBottom: '10px',
+                        fontSize: '13px',
+                        color: '#0369a1',
+                        textAlign: 'center',
+                        animation: 'pulse 2s infinite',
+                        width: '100%'
+                    }}>
+                        ⏳ Server is starting up (free hosting). This takes about 30-60 seconds...
+                    </div>
+                )}
+
+                {warmupMsg && !serverStatus.includes('waking') && (
+                    <div style={{
+                        background: '#fef9c3',
+                        border: '1px solid #fde047',
+                        borderRadius: '8px',
+                        padding: '10px 14px',
+                        marginBottom: '10px',
+                        fontSize: '13px',
+                        color: '#854d0e',
+                        textAlign: 'center',
+                        width: '100%'
+                    }}>
+                        ⏳ {warmupMsg}
+                    </div>
+                )}
+
                 {
                     (response_error!=="") && <p>{response_error}</p>
                 }
@@ -133,7 +214,7 @@ function Login() {
                             transition: '0.2s'
                         }}
                     >
-                        {isDemoLoading ? "Loading Demo..." : "Try Demo"}
+                        {isDemoLoading ? (warmupMsg ? "⏳ Server starting..." : "Loading Demo...") : "Try Demo"}
                     </button>
                 </div>
 
