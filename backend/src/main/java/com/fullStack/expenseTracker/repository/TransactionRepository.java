@@ -69,7 +69,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "JOIN users u on t.user_id = u.id " +
             "JOIN category c on t.category_id = c.category_id " +
             "JOIN transaction_type tt on c.transaction_type_id = tt.transaction_type_id " +
-            "WHERE u.email = :email and t.date >= DATE_SUB(CURRENT_DATE(), INTERVAL 5 MONTH) " +
+            "WHERE u.email = :email and t.date >= DATEADD(MONTH, -5, CURRENT_DATE()) " +
             "GROUP BY YEAR(t.date), MONTH(t.date)", nativeQuery = true)
     List<Object[]> findMonthlySummaryByUser(@Param("email") String email);
 }

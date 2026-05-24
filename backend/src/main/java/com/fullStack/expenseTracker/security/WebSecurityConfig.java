@@ -54,6 +54,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
@@ -61,7 +62,12 @@ public class WebSecurityConfig {
                                 .requestMatchers("/mywallet/transactiontype/**").permitAll()
                                 .requestMatchers("/mywallet/category/**").permitAll()
                                 .requestMatchers("/mywallet/transaction/**").permitAll()
+                                .requestMatchers("/mywallet/report/**").permitAll()
+                                .requestMatchers("/mywallet/budget/**").permitAll()
+                                .requestMatchers("/mywallet/saved/**").permitAll()
                                 .requestMatchers("/mywallet/user/**").permitAll()
+                                .requestMatchers("/h2-console/**").permitAll()
+                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated()
                 );
 

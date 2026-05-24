@@ -7,7 +7,7 @@ function Budget({totalExpense, budgetAmount, saveBudget, currentMonth}) {
 
     const { register, handleSubmit, reset, formState } = useForm();
     const [formToggle, setFormToggle] = useState(false)
-    const balance = (budgetAmount-totalExpense < 0) ? 0 : budgetAmount-totalExpense
+    const balance = (budgetAmount-totalExpense < 0) ? 0 : parseFloat((budgetAmount-totalExpense).toFixed(2))
 
     const toggleForm = (e) => {
         e.preventDefault()
@@ -23,7 +23,7 @@ function Budget({totalExpense, budgetAmount, saveBudget, currentMonth}) {
 
     const data2 = [
         { name: 'Spent', value: totalExpense },
-        { name: 'Balace', value:  balance}
+        { name: 'Balance', value:  balance}
     ];
 
     const COLORS2 = ["#ff6464", "#53d37d"];
@@ -60,7 +60,7 @@ function Budget({totalExpense, budgetAmount, saveBudget, currentMonth}) {
                         <Tooltip />
                     </PieChart>
                 </ResponsiveContainer>
-                <h4>Remaining: {budgetAmount - totalExpense}</h4>
+                <h4>Remaining: {parseFloat((budgetAmount - totalExpense).toFixed(2))}</h4>
             </div>
 
             <div className={formToggle ? 'budget-form active' : 'budget-form'}>

@@ -20,6 +20,9 @@ function usePagination(initialSortField = null) {
     }
 
     const getPageInfo = () => {
+        if (noOfRecords === 0) {
+            return "0 records"
+        }
         const start = (pageNumber * pageSize) + 1
         const end = pageNumber + 1 === noOfPages ? noOfRecords : (pageNumber * pageSize) + pageSize
 

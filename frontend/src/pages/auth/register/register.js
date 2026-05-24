@@ -24,7 +24,7 @@ function Register() {
                 console.log(response);
                 if (response.data.status === "SUCCESS"){
                     setResponseError("");
-                    navigate(`/auth/userRegistrationVerfication/${data.email}`);
+                    navigate(`/auth/login`);
                 }
                 else {
                     setResponseError("Registration failed: Something went wrong!")

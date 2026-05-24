@@ -14,13 +14,12 @@ const ForgotPasswordEmailVerfication = () => {
 
 
     const onSubmit = async (data) => {
-        setIsLoading(true)        
+        setIsLoading(true)
         await AuthService.forgotPasswordVerifyEmail(data.email).then(
             (response) => {
-                console.log(response.data.message);
                 if (response.data.status === 'SUCCESS') {
                     setResponseError("")
-                    navigate(`/auth/forgotPassword/verifyAccount/${data.email}`);
+                    navigate(`/auth/forgotPassword/resetPassword/${data.email}`);
                 } else {
                     setResponseError('Verification failed: Something went wrong!');
                 }
@@ -29,15 +28,12 @@ const ForgotPasswordEmailVerfication = () => {
                 if (error.response) {
                     const resMessage = error.response.data.response;
                     setResponseError(resMessage);
-                    console.log(resMessage);
                 }else {
-                    console.log(error.message);
                     setResponseError("Verification failed: Something went wrong!")
                 }
             }
           );
         setIsLoading(false);
-        console.log(data);
     }
 
   return (
@@ -48,7 +44,14 @@ const ForgotPasswordEmailVerfication = () => {
                 <div className='msg' style={{textAlign: 'center', fontWeight: 600}}>Enter the email address which registered with us.</div><br/>
 
                 {
-                    (response_error!=="") && <p>{response_error}</p>
+                    (response_error!=="") && (
+                        <div style={{textAlign: 'center'}}>
+                            <p>{response_error}</p>
+                            {response_error.includes("register") && (
+                                <div className='msg'>Don't have an account? <Link to='/auth/register' className='inline-link'>Register Here</Link></div>
+                            )}
+                        </div>
+                    )
                 }
                 
                 <div className='input-box'>
