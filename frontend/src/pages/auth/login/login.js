@@ -95,11 +95,17 @@ function Login() {
         setIsDemoLoading(true);
         setResponseError("");
         setWarmupMsg("");
+
+        const maxRetries = 5;
+        const retryDelay = 3000;
+
         const warmupTimer = setTimeout(() => {
             setWarmupMsg("Server is waking up, please wait...");
         }, 3000);
-        await AuthService.login_req("demo@mywallet.com", "Demo@1234").then(
-            () => {
+
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                await AuthService.login_req("demo@mywallet.com", "Demo@1234");
                 clearTimeout(warmupTimer);
                 setWarmupMsg("");
                 setResponseError("");
@@ -107,16 +113,22 @@ function Login() {
                     if (AuthService.getCurrentUser().roles.includes("ROLE_USER")) {
                         navigate("/user/dashboard");
                     }
-                }, 5000)
-                localStorage.setItem("message", JSON.stringify({ status: "SUCCESS", text: "Welcome to Demo!" }))
-            },
-            (error) => {
-                clearTimeout(warmupTimer);
-                setWarmupMsg("");
-                console.log(error);
-                setResponseError("Demo account not available. Please register a new account.");
+                }, 5000);
+                localStorage.setItem("message", JSON.stringify({ status: "SUCCESS", text: "Welcome to Demo!" }));
+                setIsDemoLoading(false);
+                return;
+            } catch (error) {
+                console.log(`Demo login attempt ${attempt}/${maxRetries} failed:`, error);
+                if (attempt < maxRetries) {
+                    setWarmupMsg("Setting up demo account, please wait...");
+                    await new Promise(resolve => setTimeout(resolve, retryDelay));
+                }
             }
-        );
+        }
+
+        clearTimeout(warmupTimer);
+        setWarmupMsg("");
+        setResponseError("Demo account not available. Please register a new account.");
         setIsDemoLoading(false);
     }
 

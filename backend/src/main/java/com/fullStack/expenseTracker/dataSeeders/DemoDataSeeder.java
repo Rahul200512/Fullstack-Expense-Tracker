@@ -39,6 +39,7 @@ public class DemoDataSeeder {
     private PasswordEncoder passwordEncoder;
 
     @EventListener(ApplicationReadyEvent.class)
+    @Order(2)
     @Transactional
     public void seedDemoData() {
         if (userRepository.existsByEmail("demo@mywallet.com")) {
