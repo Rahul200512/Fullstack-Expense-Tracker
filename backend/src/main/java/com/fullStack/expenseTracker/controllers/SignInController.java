@@ -40,6 +40,11 @@ public class SignInController {
     @Value("${app.user.profile.upload.dir}")
     private String userProfileUploadDir;
 
+    @GetMapping("/ping")
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("pong");
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid SignInRequestDto signInRequestDto) throws IOException {
         Authentication authentication = authenticationManager.authenticate(
