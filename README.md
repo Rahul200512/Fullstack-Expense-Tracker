@@ -17,7 +17,16 @@
 
 ## 🎥 Demo Video
 
-> **▶️ Watch the full demo:** _[YouTube link — paste yours here]_
+**▶️ Watch the full demo:** [docs/video/demo-animated.mp4](./docs/video/demo-animated.mp4)
+
+<details>
+<summary>📺 Or watch it inline below ↓</summary>
+
+https://github.com/Rahul200512/Fullstack-Expense-Tracker/raw/main/docs/video/demo-animated.mp4
+
+</details>
+
+> _For a full walkthrough, see the [Features](#-features) and [Screenshots](#-screenshots) sections below._
 
 ---
 
