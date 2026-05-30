@@ -48,6 +48,24 @@ function Sidebar({ activeNavId }) {
             </ul>
             <AuthVerify logOut={logout}/>
 
+            <div style={{
+                position: 'absolute',
+                bottom: '15px',
+                left: '15px',
+                right: '15px',
+                fontSize: '11px',
+                opacity: 0.55,
+                textAlign: 'center',
+                lineHeight: '1.4'
+            }}>
+                Built by <a
+                    href="https://github.com/Rahul200512"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'inherit', fontWeight: 600, textDecoration: 'none' }}
+                >Rahul Reddy Avula</a>
+            </div>
+
         </div>
     )
 }

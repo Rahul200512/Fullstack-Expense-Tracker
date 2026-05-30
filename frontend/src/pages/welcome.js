@@ -13,6 +13,20 @@ function Welcome() {
                 <Link to='/auth/login'><p><button>Log in</button></p></Link>
                 <Link to='/auth/register'><button>Create Account</button></Link>
             </div>
+
+            <p style={{
+                marginTop: '24px',
+                fontSize: '13px',
+                opacity: 0.65,
+                textAlign: 'right'
+            }}>
+                Built by <a
+                    href="https://github.com/Rahul200512"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: 'inherit', fontWeight: 600 }}
+                >Rahul Reddy Avula</a>
+            </p>
         </section>
     )
 }
