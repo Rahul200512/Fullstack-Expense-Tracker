@@ -1,105 +1,210 @@
-<h1 align="center">🌟 My Wallet - Expense tracking app 🌟</h1>
+<h1 align="center">💰 MyWallet — Full-Stack Expense Tracker</h1>
 
 <p align="center">
-  <img alt="Static Badge" src="https://img.shields.io/badge/Spring%20Boot-darkgreen?style=for-the-badge">
-  <img alt="Static Badge" src="https://img.shields.io/badge/React.js-blue?style=for-the-badge">
-  <img alt="Static Badge" src="https://img.shields.io/badge/mysql-red?style=for-the-badge">
-  <img alt="Static Badge" src="https://img.shields.io/badge/css-purple?style=for-the-badge">
-  <img alt="Static Badge" src="https://img.shields.io/badge/jwt-orange?style=for-the-badge">
+  <em>A modern personal finance app for tracking expenses, income, budgets, and visualizing spending trends.</em>
 </p>
 
-## Table of contents
+<p align="center">
+  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring%20Boot-3.x-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+  <img alt="Java" src="https://img.shields.io/badge/Java-21-007396?style=for-the-badge&logo=openjdk&logoColor=white">
+  <img alt="React" src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+  <img alt="H2" src="https://img.shields.io/badge/H2%20Database-blue?style=for-the-badge&logo=h2database&logoColor=white">
+  <img alt="JWT" src="https://img.shields.io/badge/JWT-Auth-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-blue?style=for-the-badge">
+</p>
 
-1. [Descripiton](#description)
-2. [How to run?](#how-to-run)
-3. [Screenshots](#screenshots)
+---
 
-## Description
+## 🎥 Demo Video
 
-- Developed a full-stack expense tracking web application using Spring Boot, React.js, and MySQL, facilitating seamless management of day-to-day finances.
-- Implemented multi-role functionality with user authentication, enabling secure access for both users and administrators, with features such as sign-in, sign-up, password reset, and email verification.
-- Developed intuitive user dashboards, transaction management, upcoming/recurring transactions tracking, monthly summaries, and statistics, budget management.
-- Developed categories, users and transactions management for administrators.
-- Implemented management capabilities including search, filter and pagination.
+> **▶️ Watch the full demo:** _[YouTube link — paste yours here]_
 
-## How to run?
+---
 
-### Step 1: Fork and Clone the Repository
+## 📑 Table of Contents
 
-1. Fork the repository to your GitHub account.
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Screenshots](#-screenshots)
+- [Architecture](#-architecture)
+- [Getting Started Locally](#-getting-started-locally)
+- [Project Structure](#-project-structure)
+- [What I Built / Learned](#-what-i-built--learned)
 
-2. Clone the forked repository to your local machine.
+---
 
-```sh
-git clone https://github.com/<your-username>/Fullstack-Expense-Tracker
+## ✨ Features
+
+### For Users
+- 🔐 **Secure JWT Authentication** — sign up, sign in, forgot password flow
+- 💸 **Track Expenses & Income** — 12 expense categories + 6 income categories
+- 📊 **Visual Dashboard** — real-time bubble chart of expense distribution, budget gauge
+- 📅 **Monthly Summaries** — switch between months to view historical data
+- 🔍 **Smart Search** — filter transactions by category, description, or amount
+- 📌 **Saved Transactions** — bookmark recurring transactions for one-click entry
+- 📈 **Statistics Page** — 12-month line chart comparing income vs expenses
+- 🎯 **Budget Goals** — set monthly budgets, get visual feedback on overspending
+- 🌗 **Dark / Light Mode** — toggle theme based on preference
+- 👤 **Profile Management** — update password, change profile picture
+
+### For Admins
+- 👥 Manage users (view, activate, deactivate)
+- 🏷️ Manage categories
+- 📊 View all transactions across the platform
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technologies |
+|-------|--------------|
+| **Frontend** | React 18, React Router, React Hook Form, Chart.js, Axios, CSS3 |
+| **Backend** | Spring Boot 3.x, Spring Security, Spring Data JPA, JWT, Maven |
+| **Database** | H2 (file-based, persists across restarts) |
+| **Auth** | JWT (stateless), BCrypt password hashing, role-based authorization (USER / ADMIN) |
+| **Build Tools** | Maven (backend), npm (frontend) |
+| **Language** | Java 21, JavaScript (ES6+) |
+
+---
+
+## 📸 Screenshots
+
+> _Replace these placeholders with your own screenshots once added to the repo._
+
+### 🏠 Landing Page
+![Landing Page](./docs/screenshots/landing.png)
+
+### 🔐 Login & Registration
+![Login Page](./docs/screenshots/login.png)
+
+### 📊 Dashboard (Dark Mode)
+![Dashboard Dark](./docs/screenshots/dashboard-dark.png)
+
+### 💸 Transactions History
+![Transactions](./docs/screenshots/transactions.png)
+
+### ➕ New Transaction
+![New Transaction](./docs/screenshots/new-transaction.png)
+
+### 📈 Statistics
+![Statistics](./docs/screenshots/statistics.png)
+
+### 🌗 Light Mode
+![Light Mode](./docs/screenshots/light-mode.png)
+
+---
+
+## 🏗 Architecture
+
+```
+┌──────────────────┐      HTTPS + JWT       ┌────────────────────┐      JDBC      ┌──────────┐
+│   React Frontend │ ─────────────────────► │  Spring Boot API   │ ─────────────► │    H2    │
+│   (Port 3000)    │ ◄───── JSON ─────────  │  (Port 8080)       │ ◄───────────── │ Database │
+└──────────────────┘                        └────────────────────┘                └──────────┘
+       │                                              │
+       └── Static UI, Charts.js                       └── Stateless JWT auth, BCrypt, JPA
 ```
 
-### Step 2: Setting up e-mail and database configurations
+- **Stateless authentication** with JWT tokens stored in `localStorage`
+- **Role-based authorization** via Spring Security `@PreAuthorize` annotations
+- **File-based H2 database** persists data across server restarts (no external DB needed for dev)
+- **CORS-enabled** REST API designed for separate frontend deployment
 
-- Configure the following credentials in the [`application.properties`](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/blob/main/backend/src/main/resources/application.properties) file.
+---
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/YOUR_DATABASE_NAME
-spring.datasource.username=YOUR_USERNAME
-spring.datasource.password=YOUR_PASSWORD
+## 🚀 Getting Started Locally
 
-spring.mail.username=YOUR_USERNAME
-spring.mail.password=YOUR_PASSWORD
+### Prerequisites
+- Java 21+
+- Node.js 18+
+- Maven 3.8+
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Rahul200512/Fullstack-Expense-Tracker.git
+cd Fullstack-Expense-Tracker
 ```
 
-### Step 3: Run the backend.
+### 2. Run the Backend
 
-- Run the backend application. It will automatically create the required tables. 
-- Add some custom data manually in the [categories](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/blob/7ecea71aaeca4e26a4aafd02fd602abe4d9da67d/backend/src/main/java/com/fullStack/expenseTracker/models/Category.java#L13) table for both [type](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/blob/7ecea71aaeca4e26a4aafd02fd602abe4d9da67d/backend/src/main/java/com/fullStack/expenseTracker/models/TransactionType.java#L13) `expense` and `income`.
-- To start as admin, Insert a new user manually with role admin in [`users`](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/blob/7ecea71aaeca4e26a4aafd02fd602abe4d9da67d/backend/src/main/java/com/fullStack/expenseTracker/models/User.java#L20) table.
-
-### Step 4: Run the frontend
-
-1. Navigate to [frontend direcory](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/tree/main/frontend).
-```
-cd ./frontend
+```bash
+cd backend
+mvn clean install
+mvn spring-boot:run
 ```
 
-2. Install dependencies.
-```
+Backend runs at `http://localhost:8080`. The H2 database is auto-initialized with:
+- 12 expense categories + 6 income categories (seeded)
+- A demo user: `demo@mywallet.com` / `Demo@1234` (seeded with 25 sample transactions)
+
+H2 Console (optional): `http://localhost:8080/mywallet/h2-console`
+
+### 3. Run the Frontend
+
+```bash
+cd frontend
 npm install
-```
-
-3. Run the app.
-```
 npm start
 ```
 
-Access the application at [`http://localhost:3000/`](http://localhost:3000/).
-To get started create a new account using your email.
+Frontend runs at `http://localhost:3000`.
 
-## Screenshots
+### 4. Try It Out
 
-![Screenshot 2024-04-18 091658](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/7637b70d-8b9f-485e-84f6-bce3c940f3f2)
-![Screenshot 2024-04-18 091720](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/f58e2e13-7db4-439a-b371-ce9b6e5838c7)
-![Screenshot 2024-04-18 091743](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/dbcfdbd2-d515-4197-b5ff-11ba0aed2dcf)
-![Screenshot 2024-04-18 091803](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/9d271a52-1444-4739-afe4-f51aa616d55e)
+- Open `http://localhost:3000`
+- Click **Try Demo** to log in with the seeded demo account, OR
+- Click **Create Account** to register your own
 
-Users's stuff
+---
 
-![Screenshot 2024-04-22 153501](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/a8e6d65b-626f-493e-922d-dd7c26d8294c)
-![Screenshot 2024-04-22 153536](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/ed01d05e-cead-43c5-8959-6b64615fee43)
-![Screenshot 2024-04-22 153556](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/40ab0b82-b38d-4a19-9044-d226e3f345ed)
-![Screenshot 2024-04-22 153622](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/8f8bef4e-6735-464f-a180-f2bc17633b1b)
-![Screenshot 2024-04-22 154204](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/994d23f0-e7c1-42a6-9571-44fd4353396e)
-![Screenshot 2024-04-22 154244](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/7e43cb13-6187-4af0-8900-66afef908f66)
-![Screenshot 2024-04-22 154301](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/1b308447-f5ef-4f26-826b-0e9f42e5914f)
+## 📂 Project Structure
 
+```
+Fullstack-Expense-Tracker/
+├── backend/
+│   ├── src/main/java/com/fullStack/expenseTracker/
+│   │   ├── controllers/      # REST endpoints
+│   │   ├── services/         # Business logic
+│   │   ├── models/           # JPA entities
+│   │   ├── dto/              # Request / response DTOs
+│   │   ├── security/         # JWT, Spring Security config
+│   │   ├── dataSeeders/      # Auto-seed roles, categories, demo user
+│   │   └── exceptions/       # Custom exception handlers
+│   └── src/main/resources/
+│       └── application.properties
+├── frontend/
+│   ├── src/
+│   │   ├── pages/            # Login, Register, Dashboard, etc.
+│   │   ├── components/       # Reusable UI
+│   │   ├── services/         # API calls (Axios)
+│   │   └── assets/           # CSS, images
+│   └── package.json
+└── README.md
+```
 
+---
 
-Admin's stuff
+## 🎓 What I Built / Learned
 
-![Screenshot 2024-04-18 092245](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/06454812-f542-4404-b9bf-e7d9b96b043d)
-![Screenshot 2024-04-18 092306](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/a024fadc-5f6a-4e3f-96f6-f38dd1f6b477)
-![Screenshot 2024-04-18 092325](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/5e93095e-f4be-4245-b3a4-8653cd9fea27)
-![Screenshot 2024-04-18 092342](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/5d40498e-ec3b-4559-ba15-efdf9c248d22)
-![Screenshot 2024-04-18 092805](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/aa94d2da-0080-421b-a191-d2ff9fb4472f)
-![Screenshot 2024-04-18 092822](https://github.com/DharshiBalasubramaniyam/Fullstack-Expense-Tracker/assets/139672976/6cb49c2c-8317-4cec-ad16-b9496d97b16f)
+This project deepened my understanding of:
 
+- **Spring Security with JWT** — implementing stateless auth from scratch (no third-party libraries beyond `jjwt`)
+- **JPA relationships** — `@ManyToMany`, `@ManyToOne` for users / roles / transactions / categories
+- **Custom exception handling** — `@ControllerAdvice` for consistent API error responses
+- **React Hooks + Context** — state management for auth, theme, transactions
+- **Chart.js integration** — translating raw transaction data into bubble charts, donut gauges, and time-series lines
+- **Data seeding** — using Spring's `ApplicationReadyEvent` with `@Order` to deterministically populate demo data
+- **Form validation** — React Hook Form on the frontend, Bean Validation on the backend
 
+---
 
+## 📄 License
+
+This project is licensed under the [Apache License 2.0](./LICENSE).
+
+---
+
+<p align="center">
+  Built with ☕ and 💙 by <a href="https://github.com/Rahul200512">Rahul</a>
+</p>
